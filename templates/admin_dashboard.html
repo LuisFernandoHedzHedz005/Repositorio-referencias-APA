@@ -148,6 +148,17 @@
         </div>
         
         <h2>Listado de Fuentes</h2>
+        <div class="search-container" style="margin-bottom: 20px;">
+            <input type="text" id="searchInput" placeholder="Filtrar por título..." style="
+                padding: 10px 15px;
+                width: 100%;
+                max-width: 400px;
+                border: 1px solid var(--border);
+                border-radius: 4px;
+                font-size: 14px;
+                transition: all 0.3s ease;
+            ">
+        </div>
         <table>
             <thead>
                 <tr>
@@ -205,6 +216,37 @@
                 background-color: #c0392b;
             }
         </style>
+
+        <style>
+            /* Añade esto al final de tu CSS */
+            .search-container {
+                display: flex;
+                justify-content: flex-end;
+            }
+            
+            #searchInput:focus {
+                outline: none;
+                border-color: var(--accent);
+                box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+            }
+
+            /* Ajuste para los botones de acciones */
+            td form {
+                display: inline-block;
+                margin-left: 5px;
+            }
+        </style>
     </div>
+    <script>
+        document.getElementById('searchInput').addEventListener('input', function() {
+            const filter = this.value.toLowerCase();
+            const rows = document.querySelectorAll('table tbody tr');
+            
+            rows.forEach(row => {
+                const title = row.cells[0].textContent.toLowerCase();
+                row.style.display = title.includes(filter) ? '' : 'none';
+            });
+        });
+    </script>
 </body>
 </html>

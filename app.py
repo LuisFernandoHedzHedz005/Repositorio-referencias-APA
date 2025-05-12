@@ -4,7 +4,7 @@ from mysql.connector import Error
 from datetime import datetime
 
 app = Flask(__name__)
-app.secret_key = 'tu_clave_secreta_muy_segura'  # Cambiar por una clave real en producción
+app.secret_key = 'tu_clave_secreta_muy_segura' 
 
 # Configuración de la base de datos
 db_config = {
@@ -109,7 +109,7 @@ def format_ieee_libro(fuente, autores):
     if fuente.get('anio'):
         partes.append(f"{fuente['anio']}.")
     else:
-        partes[-1] = partes[-1].replace(',', '.')  # Reemplazar última coma por punto
+        partes[-1] = partes[-1].replace(',', '.')  
     
     return ' '.join(partes)
 
@@ -122,7 +122,6 @@ def format_ieee_electronica(fuente, autores):
     
     partes = [autores_str]
     
-    # Añadir el año si existe
     if fuente.get('anio'):
         partes.append(f"{fuente['anio']},")
     
@@ -305,11 +304,9 @@ def index():
                          tipos_fuente=tipos_fuente,
                          resultados=resultados)
 
-# Usa esta función auxiliar para manejar posibles valores None
 def campo_seguro(valor, default=""):
     return valor if valor is not None else default
 
-# Función para obtener autores de una fuente
 def get_autores(fuente_id):
     conn = mysql.connector.connect(**db_config)
     cursor = conn.cursor(dictionary=True)
@@ -420,7 +417,7 @@ def edit_fuente(id):
             fuente = cursor.fetchone()
             
             # Obtener autores de la fuente
-            autores = get_autores(id)  # <--- ¡Aquí se obtienen los autores!
+            autores = get_autores(id)  
             
             # Obtener tipos de fuente
             cursor.execute("SELECT * FROM tipos_fuente")
@@ -436,7 +433,7 @@ def edit_fuente(id):
             
             return render_template('edit_fuente.html', 
                                  fuente=fuente, 
-                                 autores=autores,  # <--- Ahora está definido
+                                 autores=autores,  
                                  tipos=tipos,
                                  asignaturas=asignaturas,
                                  asignaturas_seleccionadas=asignaturas_seleccionadas)
@@ -479,7 +476,7 @@ def edit_fuente(id):
             
             # Insertar nuevos autores o actualizar existentes
             for nombre_autor in autores_nombres:
-                if nombre_autor.strip():  # Asegurarse de que no esté vacío
+                if nombre_autor.strip():  
                     # Buscar si el autor ya existe
                     cursor.execute("SELECT id FROM autores WHERE nombre_completo = %s", (nombre_autor,))
                     autor = cursor.fetchone()
@@ -588,7 +585,7 @@ def nueva_fuente():
             autores_nombres = request.form.getlist('autores[]')
             
             for nombre_autor in autores_nombres:
-                if nombre_autor.strip():  # Asegurarse de que no esté vacío
+                if nombre_autor.strip(): 
                     # Buscar si el autor ya existe
                     cursor.execute("SELECT id FROM autores WHERE nombre_completo = %s", (nombre_autor,))
                     autor = cursor.fetchone()
@@ -605,7 +602,6 @@ def nueva_fuente():
                                 (autor_id, fuente_id))
 
             # Manejar asignaturas
-             # Manejar asignaturas (asegurar que sean enteros)
             asignaturas_ids = [int(id) for id in request.form.getlist('asignaturas')]
             
             for asignatura_id in asignaturas_ids:
